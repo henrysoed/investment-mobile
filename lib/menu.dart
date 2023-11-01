@@ -3,18 +3,16 @@ import 'package:flutter/material.dart';
 class MyHomePage extends StatelessWidget {
     MyHomePage({Key? key}) : super(key: key);
       final List<ShopItem> items = [
-      ShopItem("Lihat Item", Icons.checklist),
-      ShopItem("Tambah Item", Icons.add_shopping_cart),
-      ShopItem("Logout", Icons.logout),
+      ShopItem("Lihat Item", Icons.checklist, Colors.blue),
+      ShopItem("Tambah Item", Icons.add_shopping_cart, Colors.green),
+      ShopItem("Logout", Icons.logout, Colors.red),
     ];
 
     @override
     Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Shopping List',
-        ),
+        title: const Text('Shopping List',),
       ),
       body: SingleChildScrollView(
         // Widget wrapper yang dapat discroll
@@ -69,8 +67,9 @@ class MyHomePage extends StatelessWidget {
 class ShopItem {
   final String name;
   final IconData icon;
+  final Color color;
 
-  ShopItem(this.name, this.icon);
+  ShopItem(this.name, this.icon, this.color);
 }
 
 class ShopCard extends StatelessWidget {
@@ -81,7 +80,7 @@ class ShopCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: Colors.indigo,
+      color: item.color,
       child: InkWell(
         // Area responsive terhadap sentuhan
         onTap: () {
