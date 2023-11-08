@@ -32,8 +32,8 @@ class LeftDrawer extends StatelessWidget {
                   // TODO: Tambahkan gaya teks dengan center alignment, font ukuran 15, warna putih, dan weight biasa
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    fontSize: 30,
-                    fontWeight: FontWeight.bold,
+                    fontSize: 15,
+                    fontWeight: FontWeight.normal,
                     color: Colors.white,
                   ),
                 ),
@@ -55,7 +55,7 @@ class LeftDrawer extends StatelessWidget {
           ),
           ListTile(
             leading: const Icon(Icons.add_shopping_cart),
-            title: const Text('Tambah Produk'),
+            title: const Text('Tambah Item'),
             // Bagian redirection ke ShopFormPage
             onTap: () {
               /*

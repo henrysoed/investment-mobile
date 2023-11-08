@@ -21,7 +21,7 @@ class _ShopFormPageState extends State<ShopFormPage> {
       appBar: AppBar(
         title: const Center(
           child: Text(
-            'Form Tambah Produk',
+            'Form Tambah Item',
           ),
         ),
         backgroundColor: Colors.indigo,
