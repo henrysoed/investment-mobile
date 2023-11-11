@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:investment_inventory/screens/menu.dart';
 // TODO: Impor halaman ShopFormPage jika sudah dibuat
 import 'package:investment_inventory/screens/shoplist_form.dart';
+import 'package:investment_inventory/screens/list_item.dart';
 
 class LeftDrawer extends StatelessWidget {
   const LeftDrawer({super.key});
@@ -18,7 +19,7 @@ class LeftDrawer extends StatelessWidget {
             child: Column(
               children: [
                 Text(
-                  'Shopping List',
+                  'Investment Inventory',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 30,
@@ -28,7 +29,7 @@ class LeftDrawer extends StatelessWidget {
                 ),
                 Padding(padding: EdgeInsets.all(10)),
                 Text(
-                  "Catat seluruh keperluan belanjamu di sini!",
+                  "Write all your investment portofolio",
                   // TODO: Tambahkan gaya teks dengan center alignment, font ukuran 15, warna putih, dan weight biasa
                   textAlign: TextAlign.center,
                   style: TextStyle(
@@ -53,19 +54,25 @@ class LeftDrawer extends StatelessWidget {
                   ));
             },
           ),
-          ListTile(
-            leading: const Icon(Icons.add_shopping_cart),
-            title: const Text('Tambah Item'),
-            // Bagian redirection ke ShopFormPage
+           ListTile(
+            leading: const Icon(Icons.description_outlined),
+            title: const Text('Lihat Item'),
             onTap: () {
-              /*
-              TODO: Buatlah routing ke ShopFormPage di sini,
-              setelah halaman ShopFormPage sudah dibuat.
-              */
               Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => ShopFormPage(),
+                    builder: (context) => ListItemPage(),
+                  ));
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.note_add_outlined),
+            title: const Text('Tambah Item'),
+            onTap: () {
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const InventoryFormPage(),
                   ));
             },
           ),

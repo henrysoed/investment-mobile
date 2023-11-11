@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 // TODO: Impor drawer yang sudah dibuat sebelumnya
 import 'package:investment_inventory/widgets/left_drawer.dart';
+import 'package:investment_inventory/screens/list_item.dart';
+import 'package:investment_inventory/screens/menu.dart';
 
-class ShopFormPage extends StatefulWidget {
-  const ShopFormPage({super.key});
+class InventoryFormPage extends StatefulWidget {
+  const InventoryFormPage({super.key});
 
   @override
-  State<ShopFormPage> createState() => _ShopFormPageState();
+  State<InventoryFormPage> createState() => _InventoryFormPageState();
 }
 
-class _ShopFormPageState extends State<ShopFormPage> {
+class _InventoryFormPageState extends State<InventoryFormPage> {
   final _formKey = GlobalKey<FormState>();
   String _name = "";
   int _amount = 0;
@@ -144,6 +146,11 @@ class _ShopFormPageState extends State<ShopFormPage> {
                   ),
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
+                      
+                    setState(() {
+                      WiListItemPage.database.add(InventoryItem(_name, _amount, _price, _description));
+                    });
+
                       showDialog(
                         context: context,
                         builder: (context) {
