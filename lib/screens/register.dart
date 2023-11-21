@@ -1,78 +1,32 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+import 'package:investment_inventory/screens/login.dart';
+import 'package:pbp_django_auth/pbp_django_auth.dart';
+import 'package:provider/provider.dart';
 
 class RegistrationPage extends StatefulWidget {
+  const RegistrationPage({Key? key}) : super(key: key);
+
   @override
   _RegistrationPageState createState() => _RegistrationPageState();
 }
 
 class _RegistrationPageState extends State<RegistrationPage> {
-  //final _formKey = GlobalKey<FormState>();
   final TextEditingController _usernameController = TextEditingController();
-  final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-
-  Future<void> _registerUser() async {
-    final url = Uri.parse("http://127.0.0.1:8000/auth/register/"
-        );
-    final response = await http.post(
-      url,
-      body: {
-        'username': _usernameController.text,
-        'email': _emailController.text,
-        'password1':
-            _passwordController.text, 
-        'password2':
-            _passwordController.text, 
-      },
-    );
-
-    if (response.statusCode == 200) {
-      // Handle successful registration
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('Success'),
-            content: Text('User registered successfully.'),
-            actions: <Widget>[
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: Text('OK'),
-              ),
-            ],
-          );
-        },
-      );
-    } else {
-      // Handle registration errors
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('Error'),
-            content: Text('Failed to register user.'),
-            actions: <Widget>[
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: Text('OK'),
-              ),
-            ],
-          );
-        },
-      );
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
+    final request = context.watch<CookieRequest>();
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Regisration Form'),
+        automaticallyImplyLeading: false,
+        title: const Center(
+          child: Text(
+            'Register',
+          ),
+        ),
+        backgroundColor: Colors.indigo,
+        foregroundColor: Colors.white,
       ),
       body: Container(
         padding: const EdgeInsets.all(16.0),
@@ -87,13 +41,6 @@ class _RegistrationPageState extends State<RegistrationPage> {
             ),
             const SizedBox(height: 12.0),
             TextField(
-              controller: _emailController,
-              decoration: const InputDecoration(
-                labelText: 'Email',
-              ),
-            ),
-            const SizedBox(height: 24.0),
-            TextField(
               controller: _passwordController,
               decoration: const InputDecoration(
                 labelText: 'Password',
@@ -103,13 +50,86 @@ class _RegistrationPageState extends State<RegistrationPage> {
             const SizedBox(height: 24.0),
             ElevatedButton(
               onPressed: () async {
-                // String username = _usernameController.text;
-                // String password = _passwordController.text;
+                String username = _usernameController.text;
+                String password = _passwordController.text;
+                if (username.isEmpty || password.isEmpty) {
+                  _usernameController.clear();
+                  _passwordController.clear();
+                  showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      title: const Text('Input Tidak Valid'),
+                      content: const Text('Harap isi semua kolom input.'),
+                      actions: [
+                        TextButton(
+                          child: const Text('OK'),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                        ),
+                      ],
+                    ),
+                  );
+                  return; // Stop eksekusi jika input tidak valid
+                }
 
-                await _registerUser();
+                final response =
+                    await request.post("http://127.0.0.1:8000/auth/register/", {
+                  'username': username,
+                  'password': password,
+                });
+
+                bool status = response['status'];
+
+                if (status == false) {
+                  _usernameController.clear();
+                  _passwordController.clear();
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => LoginPage()),
+                  );
+                  showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      title: const Text('Register Gagal'),
+                      content: Text(response['message']),
+                      actions: [
+                        TextButton(
+                          child: const Text('OK'),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                        ),
+                      ],
+                    ),
+                  );
+                } else {
+                  _usernameController.clear();
+                  _passwordController.clear();
+                  String message = response['message'];
+                  String uname = response['username'];
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => LoginPage()),
+                  );
+                  ScaffoldMessenger.of(context)
+                    ..hideCurrentSnackBar()
+                    ..showSnackBar(SnackBar(
+                        content: Text(
+                            "$message Berhasil membuat akun dengan username $uname.")));
+                }
               },
               child: const Text('Register'),
             ),
+            const SizedBox(height: 20),
+            TextButton(
+                onPressed: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => LoginPage()),
+                  );
+                },
+                child: const Text("Kembali"))
           ],
         ),
       ),
