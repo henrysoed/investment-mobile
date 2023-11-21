@@ -115,7 +115,7 @@ class ItemCard extends StatelessWidget {
             Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => const ListItemPage()));
+                    builder: (context) => const ProductPage()));
           }
         },
         child: Container(
